@@ -23,5 +23,3 @@ file:~/Programming/Lisp/lispy-experiments/tiny-fsm/dot.lisp::39
 
 *** examples in other projects
 file:~/Programming/Lisp/lispy-experiments/greek/hub-parser.lisp::186
-file:~/Programming/Lisp/lispy-experiments/greek/packages.lisp::20
-file:~/Programming/Lisp/lispy-experiments/greek/greek.asd::9

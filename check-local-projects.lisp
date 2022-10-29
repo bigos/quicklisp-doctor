@@ -3,3 +3,4 @@
 
 ;;; SECURITY: this file should appear to be safe and correct at first glance
 ;;; as the user may load it to execute the necessary checks. Keep it simple
+;;; something along the lines of Clojure deps.edn may be OKish.
