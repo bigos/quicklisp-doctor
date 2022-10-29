@@ -23,6 +23,26 @@
         (sb-impl::process-exit-code process)
         program-output))))
 
+;;; copied from alexandria
+(defun flatten (tree)
+  "Traverses the tree in order, collecting non-null leaves into a list."
+  (let (list)
+    (labels ((traverse (subtree)
+               (when subtree
+                 (if (consp subtree)
+                     (progn
+                       (traverse (car subtree))
+                       (traverse (cdr subtree)))
+                     (push subtree list)))))
+      (traverse tree))
+    (nreverse list)))
+
+;;; Am I going too far? Should we expect only one local projects folder?
+(defun local-project-directories ()
+  (flatten
+   (loop for lpd in ql:*local-project-directories*
+         collect (uiop/filesystem::subdirectories lpd))))
+
 (defun print-relevant-info ()
   (format t "OS *************************~%")
   (format t "OS ~S~%" (uiop/os:operating-system))
@@ -31,12 +51,12 @@
   (format t "quicklisp *************************~%")
   (format t "home ~S~%" ql:*quicklisp-home*)
   (format t "client version ~S~%" (ql:client-version))
-  (format t "dist version ~S~%" (ql:dist-version "quicklisp"))
   (format t "latest dist version ~S~%" (caar (ql:available-dist-versions "quicklisp")))
+  (format t "loaded dist version ~S~%" (ql:dist-version "quicklisp"))
   (format t "local projects ~S~%" ql:*local-project-directories*)
 
   (format t "git *************************~%")
-  (format t "git path ~S~%"
+  (format t "git path ~S~%" ; assumption on location of which, may cause problems on windows
           (run-program '("/usr/bin/which" "git")))
   (format t "git version ~S~%"
           (run-program '("/usr/bin/git" "--version")))
