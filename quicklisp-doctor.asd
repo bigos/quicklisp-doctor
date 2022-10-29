@@ -10,7 +10,7 @@
                (:file "quicklisp-doctor")))
 
 
-(push #p "~/Programming/Lisp/quicklisp-doctor/" asdf:*central-registry*)
-(ql:quickload 'quicklisp-doctor)
-(in-package :quicklisp-doctor)
-(examine-declaration "~/Programming/Lisp/quicklisp-doctor/check-local-projects.lisp")
+;; (push #p "~/Programming/Lisp/quicklisp-doctor/" asdf:*central-registry*)
+;; (ql:quickload 'quicklisp-doctor)
+;; (in-package :quicklisp-doctor)
+;; (examine-declaration "~/Programming/Lisp/quicklisp-doctor/check-local-projects.lisp")
