@@ -1,0 +1,20 @@
+* Notes
+
+** git
+
+This is example of checking if the folder has the revision we expect.
+
+#+begin_example
+git show --oneline --stat ff2a
+git log -1
+#+end_example
+
+** running commands
+
+examples of running a program
+file:~/Programming/Lisp/lispy-experiments/calling-program.lisp::60
+file:~/Programming/Lisp/lispy-experiments/double-linked-list.lisp::183
+file:~/Programming/Lisp/lispy-experiments/turtle-graphics/load-tests.lisp::9
+
+process exit code
+file:~/Programming/Lisp/lispy-experiments/simple-graphviz/simple-graphviz.lisp::61

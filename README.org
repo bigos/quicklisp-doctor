@@ -8,16 +8,7 @@ I need the possibility to have a program that examines your quicklisp.
 + Checking if we have all expected local-projects
 + Version check of local-projects
 + SBCL specific
-+ Works on Windows
++ Works on Windows too
 
 ** No code yet
 Write me please.
-
-** git
-
-This is example of checking if the folder has the revision we expect.
-
-#+begin_example
-git show --oneline --stat ff2a
-git log -1
-#+end_example
