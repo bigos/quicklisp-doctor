@@ -1,0 +1,14 @@
+* Quicklisp Doctor
+
+I need the possibility to have a program that examines your quicklisp.
+
+** Nice to have
+
++ Information about new quicklisp release
++ Checking if we have all expected local-projects
++ Version check of local-projects
++ SBCL specific
++ Works on Windows
+
+** No code yet
+Write me please.
