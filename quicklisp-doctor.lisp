@@ -22,5 +22,16 @@
       (list :output program-output
             :exit-code (sb-impl::process-exit-code process)))))
 
+(defun print-relevant-info ()
+  (format t "git =========================~%")
+  (format t "git path~%")
+  (format t "~S~%"
+          (run-program "/usr/bin/which" '("git")))
+
+  (format t "git version~%")
+  (format t "~S~%"
+          (run-program "/usr/bin/git" '("--version")))
+  )
+
 (defun examine-declaration (declaration-file)
   (warn "not finished ~S" declaration-file))
