@@ -5,7 +5,7 @@
   :author "Jacek Podkanski"
   :version "0.0.1"
   :serial T
-  :depends-on (:esrap)
+  :depends-on (:esrap :alexandria :serapeum)
   :components ((:file "packages")
                (:file "quicklisp-doctor")))
 

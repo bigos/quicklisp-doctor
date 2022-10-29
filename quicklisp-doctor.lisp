@@ -2,8 +2,6 @@
 
 (in-package :quicklisp-doctor)
 
-;; (run-program "/usr/bin/hostname" (list))
-;; (run-program "/usr/bin/which" (list "git"))
 (defun run-program (program-and-args)
   (let ((process (sb-ext:run-program
                   (first program-and-args)
@@ -23,42 +21,24 @@
         (sb-impl::process-exit-code process)
         program-output))))
 
-;;; copied from alexandria
-(defun flatten (tree)
-  "Traverses the tree in order, collecting non-null leaves into a list."
-  (let (list)
-    (labels ((traverse (subtree)
-               (when subtree
-                 (if (consp subtree)
-                     (progn
-                       (traverse (car subtree))
-                       (traverse (cdr subtree)))
-                     (push subtree list)))))
-      (traverse tree))
-    (nreverse list)))
-
 ;;; Am I going too far? Should we expect only one local projects folder?
 (defun local-project-directories ()
-  (flatten
+  (alexandria:flatten
    (loop for lpd in ql:*local-project-directories*
          collect (uiop/filesystem::subdirectories lpd))))
 
 (defun examine-folder (folder)
-  (warn "examining folder ~S" folder)
-  (warn "with directories ~S"
-        (uiop/filesystem::subdirectories folder))
-
-
   (if (uiop/filesystem:directory-exists-p (merge-pathnames  folder ".git"))
       (list folder
-            :git
-            (run-program (list "/usr/bin/git" "-C" (namestring folder) "log" "-1")))
+            :git (first
+                  (serapeum:split-sequence #\Newline
+                                           (cadr
+                                            (run-program (list "/usr/bin/git"
+                                                               "-C" (namestring folder)
+                                                               "log" "-1"))))))
       (list folder
             :no-git-detected)))
 
-(defun zzz ()
-  (loop for d in (local-project-directories)
-        collect (examine-folder d)))
 
 (defun print-relevant-info ()
   (format t "OS *************************~%")
@@ -77,7 +57,12 @@
           (run-program '("/usr/bin/which" "git")))
   (format t "git version ~S~%"
           (run-program '("/usr/bin/git" "--version")))
-  )
+
+  (format t "git commits in local folders *************************~%")
+  (loop for d in (local-project-directories)
+        do
+           (destructuring-bind (folder git-status &optional commit) (examine-folder d)
+             (format t "~a ~a ~a~%" folder git-status (if commit commit "")))))
 
 (defun examine-declaration (declaration-file)
   (warn "not finished ~S" declaration-file))
