@@ -14,7 +14,7 @@ git log -1
 examples of running a program
 file:~/Programming/Lisp/lispy-experiments/calling-program.lisp::60
 file:~/Programming/Lisp/lispy-experiments/double-linked-list.lisp::183
-file:~/Programming/Lisp/lispy-experiments/turtle-graphics/load-tests.lisp::9
 
 process exit code
 file:~/Programming/Lisp/lispy-experiments/simple-graphviz/simple-graphviz.lisp::61
+file:~/Programming/Lisp/lispy-experiments/tiny-fsm/dot.lisp::39
