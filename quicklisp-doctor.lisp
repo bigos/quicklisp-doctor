@@ -23,13 +23,21 @@
             :exit-code (sb-impl::process-exit-code process)))))
 
 (defun print-relevant-info ()
-  (format t "git =========================~%")
-  (format t "git path~%")
-  (format t "~S~%"
-          (run-program "/usr/bin/which" '("git")))
+  (format t "OS =========================~%")
+  (format t "OS ~S~%" (uiop/os:operating-system))
+  (format t "architecture ~S~%" (uiop/os:architecture))
 
-  (format t "git version~%")
-  (format t "~S~%"
+  (format t "quicklisp =========================~%")
+  (format t "home ~S~%" ql:*quicklisp-home*)
+  (format t "client version ~S~%" (ql:client-version))
+  (format t "dist version ~S~%" (ql:dist-version "quicklisp"))
+  (format t "latest dist version ~S~%" (car (ql:available-dist-versions "quicklisp")))
+  (format t "local projects ~S~%" ql:*local-project-directories*)
+
+  (format t "git =========================~%")
+  (format t "git path ~S~%"
+          (run-program "/usr/bin/which" '("git")))
+  (format t "git version ~S~%"
           (run-program "/usr/bin/git" '("--version")))
   )
 
