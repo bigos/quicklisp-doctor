@@ -10,7 +10,7 @@
                   (rest  program-and-args)
                   :output :stream
                   :wait nil))
-        (program-output (make-array '(0) :element-type 'base-char
+        (program-output (make-array '(0) :element-type 'character
                                          :fill-pointer 0 :adjustable t)))
     (with-output-to-string (s program-output)
       (loop for line = (read-line (sb-ext:process-output process)
@@ -42,6 +42,23 @@
   (flatten
    (loop for lpd in ql:*local-project-directories*
          collect (uiop/filesystem::subdirectories lpd))))
+
+(defun examine-folder (folder)
+  (warn "examining folder ~S" folder)
+  (warn "with directories ~S"
+        (uiop/filesystem::subdirectories folder))
+
+
+  (if (uiop/filesystem:directory-exists-p (merge-pathnames  folder ".git"))
+      (list folder
+            :git
+            (run-program (list "/usr/bin/git" "-C" (namestring folder) "log" "-1")))
+      (list folder
+            :no-git-detected)))
+
+(defun zzz ()
+  (loop for d in (local-project-directories)
+        collect (examine-folder d)))
 
 (defun print-relevant-info ()
   (format t "OS *************************~%")
