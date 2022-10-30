@@ -59,7 +59,7 @@
     (format t "latest dist version ~S~%" latest-quicklisp-version)
     (format t "loaded dist version ~S~%" (ql:dist-version "quicklisp"))
     (if (equal latest-quicklisp-version (ql:dist-version "quicklisp"))
-        (format t "You are using the latest quicklisp.")
+        (format t "You are using the latest quicklisp.~%")
         (progn
           (format t "~&~%!!!!!!!!!!!!!!!! WARNING your quicklisp is not up to date !!!!!!!!!!!!!!!!!!!!!!!!~%")
           (format t "In your Lisp REPL please run ~&~a~%~a~%~%"
@@ -70,7 +70,7 @@
 
   (format t "paths *************************~%")
   (format t "Your Lisp and editor may have different paths, we may need that information.~%")
-  (format t "current path ~A" (uiop:getenv "PATH"))
+  (format t "path ~A~%" (uiop:getenv "PATH"))
 
 
   (format t "git *************************~%")
