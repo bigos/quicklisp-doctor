@@ -58,7 +58,7 @@
     (format t "loaded dist version ~S~%" (ql:dist-version "quicklisp"))
     (unless (equal latest-quicklisp-version (ql:dist-version "quicklisp"))
       (format t "~&~%!!!!!!!!!!!!!!!! WARNING your quicklisp is not up to date !!!!!!!!!!!!!!!!!!!!!!!!~%")
-      (format t "In tour Lisp REPL please run ~&~a~%~a~%~%"
+      (format t "In your Lisp REPL please run ~&~a~%~a~%~%"
               "(ql:update-client)"
               "(ql:update-dist)")))
   
