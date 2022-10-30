@@ -30,12 +30,11 @@
 (defun examine-folder (folder)
   (if (uiop/filesystem:directory-exists-p (merge-pathnames  folder ".git"))
       (list folder
-            :git (first
-                  (serapeum:split-sequence #\Newline
-                                           (cadr
-                                            (run-program (list "/usr/bin/git"
-                                                               "-C" (namestring folder)
-                                                               "log" "-1"))))))
+            :git
+            (cadr
+             (run-program (list "/usr/bin/git"
+                                "-C" (namestring folder)
+                                "log" "-1"))))
       (list folder
             :no-git-detected)))
 
@@ -62,7 +61,7 @@
   (loop for d in (local-project-directories)
         do
            (destructuring-bind (folder git-status &optional commit) (examine-folder d)
-             (format t "~a ~a ~a~%" folder git-status (if commit commit "")))))
+             (format t "~&~%~a ~a ~a~%" folder git-status (if commit commit "")))))
 
 (defun examine-declaration (declaration-file)
   (warn "not finished ~S" declaration-file))
