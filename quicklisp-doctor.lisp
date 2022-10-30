@@ -61,8 +61,8 @@
     (unless (equal latest-quicklisp-version (ql:dist-version "quicklisp"))
       (format t "~&~%!!!!!!!!!!!!!!!! WARNING your quicklisp is not up to date !!!!!!!!!!!!!!!!!!!!!!!!~%")
       (format t "In your Lisp REPL please run ~&~a~%~a~%~%"
-              "(ql:update-client)"
-              "(ql:update-dist)")))
+              "(ql:update-client)"             
+              "(ql:update-dist \"quicklisp\")")))
   
   (format t "local projects ~S~%" ql:*local-project-directories*)
 
