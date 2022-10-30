@@ -58,16 +58,18 @@
   (let ((latest-quicklisp-version (caar (ql:available-dist-versions "quicklisp"))))
     (format t "latest dist version ~S~%" latest-quicklisp-version)
     (format t "loaded dist version ~S~%" (ql:dist-version "quicklisp"))
-    (unless (equal latest-quicklisp-version (ql:dist-version "quicklisp"))
-      (format t "~&~%!!!!!!!!!!!!!!!! WARNING your quicklisp is not up to date !!!!!!!!!!!!!!!!!!!!!!!!~%")
-      (format t "In your Lisp REPL please run ~&~a~%~a~%~%"
-              "(ql:update-client)"             
-              "(ql:update-dist \"quicklisp\")")))
+    (if (equal latest-quicklisp-version (ql:dist-version "quicklisp"))
+        (format t "You are using the latest quicklisp.")
+        (progn
+          (format t "~&~%!!!!!!!!!!!!!!!! WARNING your quicklisp is not up to date !!!!!!!!!!!!!!!!!!!!!!!!~%")
+          (format t "In your Lisp REPL please run ~&~a~%~a~%~%"
+                  "(ql:update-client)"             
+                  "(ql:update-dist \"quicklisp\")"))))
   
   (format t "local projects ~S~%" ql:*local-project-directories*)
 
-  (format t "path *************************~%")
-  (format t "depending onyour system Lisp and editor amy have different paths~%")
+  (format t "paths *************************~%")
+  (format t "Your Lisp and editor may have different paths, we may need that information.~%")
   (format t "current path ~A" (uiop:getenv "PATH"))
 
 
@@ -86,7 +88,7 @@
     (format t "git version ~S~%"
             (run-program (list git-path "--version"))) ;and I may need c:/msys64 prefix fro my commands, aargh!
 
-    (format t "git commits in local folders *************************~%")
+    (format t "local-projects folders and their git info *************************~%")
     (loop for d in (local-project-directories)
           do
              (destructuring-bind (folder git-status &optional commit) (examine-folder d git-path)
