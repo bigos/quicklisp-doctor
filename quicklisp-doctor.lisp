@@ -49,7 +49,9 @@
   (format t "OS *************************~%")
   (format t "OS ~S~%" (uiop/os:operating-system))
   (format t "architecture ~S~%" (uiop/os:architecture))
-
+  (format t "Lisp ~S ~S~%" (lisp-implementation-type)
+          (lisp-implementation-version))
+  
   (format t "quicklisp *************************~%")
   (format t "home ~S~%" ql:*quicklisp-home*)
   (format t "client version ~S~%" (ql:client-version))
