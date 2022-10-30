@@ -45,7 +45,7 @@
             :no-git-detected)))
 
 
-(defun print-relevant-info ()
+(defun describe-workstation ()
   (format t "OS *************************~%")
   (format t "OS ~S~%" (uiop/os:operating-system))
   (format t "architecture ~S~%" (uiop/os:architecture))
