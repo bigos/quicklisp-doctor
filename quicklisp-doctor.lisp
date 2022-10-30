@@ -53,8 +53,15 @@
   (format t "quicklisp *************************~%")
   (format t "home ~S~%" ql:*quicklisp-home*)
   (format t "client version ~S~%" (ql:client-version))
-  (format t "latest dist version ~S~%" (caar (ql:available-dist-versions "quicklisp")))
-  (format t "loaded dist version ~S~%" (ql:dist-version "quicklisp"))
+  (let ((latest-quicklisp-version (caar (ql:available-dist-versions "quicklisp"))))
+    (format t "latest dist version ~S~%" latest-quicklisp-version)
+    (format t "loaded dist version ~S~%" (ql:dist-version "quicklisp"))
+    (unless (equal latest-quicklisp-version (ql:dist-version "quicklisp"))
+      (format t "~&~%!!!!!!!!!!!!!!!! WARNING your quicklisp is not up to date !!!!!!!!!!!!!!!!!!!!!!!!~%")
+      (format t "In tour Lisp REPL please run ~&~a~%~a~%~%"
+              "(ql:update-client)"
+              "(ql:update-dist)")))
+  
   (format t "local projects ~S~%" ql:*local-project-directories*)
 
   (format t "path *************************~%")
@@ -81,7 +88,7 @@
     (loop for d in (local-project-directories)
           do
              (destructuring-bind (folder git-status &optional commit) (examine-folder d git-path)
-               (format t "~a ~a ~a~%" folder git-status (if commit commit ""))))))
+               (format t "~a ~a ~a~%" folder git-status (if commit commit "")))))
 
-(defun examine-declaration (declaration-file)
-  (warn "not finished ~S" declaration-file))
+  (defun examine-declaration (declaration-file)
+    (warn "not finished ~S" declaration-file)))
