@@ -27,14 +27,20 @@
    (loop for lpd in ql:*local-project-directories*
          collect (uiop/filesystem::subdirectories lpd))))
 
+;;; consider adding parsing of commands output at some point
+(defun commit-info (commit)
+  (let ((split (serapeum:split-sequence #\Newline commit)))
+    (list (nth 0 split)
+          (nth 2 split))))
+
 (defun examine-folder (folder)
   (if (uiop/filesystem:directory-exists-p (merge-pathnames  folder ".git"))
       (list folder
-            :git
-            (cadr
-             (run-program (list "/usr/bin/git"
-                                "-C" (namestring folder)
-                                "log" "-1"))))
+            :git (commit-info
+                  (cadr
+                   (run-program (list "/usr/bin/git"
+                                      "-C" (namestring folder)
+                                      "log" "-1")))))
       (list folder
             :no-git-detected)))
 
@@ -61,7 +67,7 @@
   (loop for d in (local-project-directories)
         do
            (destructuring-bind (folder git-status &optional commit) (examine-folder d)
-             (format t "~&~%~a ~a ~a~%" folder git-status (if commit commit "")))))
+             (format t "~a ~a ~a~%" folder git-status (if commit commit "")))))
 
 (defun examine-declaration (declaration-file)
   (warn "not finished ~S" declaration-file))
