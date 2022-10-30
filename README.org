@@ -1,14 +1,22 @@
 * Quicklisp Doctor
 
-I need the possibility to have a program that examines your quicklisp.
+I need the possibility to have a program that examines the quicklisp installation.
 
-** Nice to have
+** Project goals
+The following goals have been implemented to some extent.
 
 + Information about new quicklisp release
-+ Checking if we have all expected local-projects
-+ Version check of local-projects
++ List of local-projects
++ Git version of local-projects
 + SBCL specific
 + Works on Windows too
 
-** No code yet
-Write me please.
+We may need to improve the code some more. The enxt step would be a list of
+requirements that could be used to make sure we have the correct commits in
+local-projects.
+
+Windows version works with Msys2 installed and may not work in all situations.
+That may require more work. If you have any suggestions please raise an issue.
+
+
+
