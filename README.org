@@ -11,7 +11,7 @@ The following goals have been implemented to some extent.
 + SBCL specific
 + Works on Windows too
 
-We may need to improve the code some more. The enxt step would be a list of
+We may need to improve the code some more. The next step would be a list of
 requirements that could be used to make sure we have the correct commits in
 local-projects.
 
