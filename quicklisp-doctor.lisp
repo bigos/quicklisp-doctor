@@ -115,7 +115,7 @@
      :git (list :tried-path git-path
                 :version (run-program (list git-path "--version")))
      :local-projects (loop for d in (local-project-directories)
-                           collect (alexandria:make-keyword
+                           collect (alexandria:make-keyword ; because getf uses identity
                                     (car
                                      (last
                                       (butlast
