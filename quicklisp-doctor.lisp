@@ -133,5 +133,7 @@
           for status =  (if  (and (eq  (car project-git) :git)
                                   (equal expected-commit project-commit))
                              :matching-commit
-                             (list :no-match project :needs-updating-to-required-commit expected-commit))
+                             (if project-git
+                                 (list :no-match project :needs-updating-to-required-commit expected-commit)
+                                 (list :not-found project :perhaps-needs-cloning)))
           collect (list project  status))))
