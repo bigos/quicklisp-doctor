@@ -104,16 +104,23 @@
                    :architecture (uiop/os:architecture)
                    :lisp-implementation-type (lisp-implementation-type)
                    :lisp-implementation-version (lisp-implementation-version))
-     :quicklisp (list :client-version (ql:client-version)
+     :quicklisp (list
+                      :client-version (ql:client-version)
                       :dist-version (ql:dist-version "quicklisp")
                       :latest-version latest-quicklisp-version
-                      :is-latest-used (equal latest-quicklisp-version
-                                             (ql:dist-version "quicklisp")))
+                      :is-latest-used (equal latest-quicklisp-version (ql:dist-version "quicklisp"))
+                 :local-projects ql:*local-project-directories*
+                      )
      :paths (uiop:getenv "PATH")
      :git (list :tried-path git-path
                 :version (run-program (list git-path "--version")))
      :local-projects (loop for d in (local-project-directories)
-                           collect (examine-folder d git-path)))))
+                           collect (car
+                                    (last
+                                     (butlast
+                                      (serapeum:split-sequence #\/ (namestring d)))))
+                           collect   (rest
+                                      (examine-folder d git-path))))))
 
 (defun examine-declaration (declaration-file)
   (warn "not finished ~S" declaration-file))
