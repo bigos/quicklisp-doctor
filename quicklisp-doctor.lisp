@@ -115,12 +115,23 @@
      :git (list :tried-path git-path
                 :version (run-program (list git-path "--version")))
      :local-projects (loop for d in (local-project-directories)
-                           collect (car
-                                    (last
-                                     (butlast
-                                      (serapeum:split-sequence #\/ (namestring d)))))
+                           collect (alexandria:make-keyword
+                                    (car
+                                     (last
+                                      (butlast
+                                       (serapeum:split-sequence #\/ (namestring d))))))
                            collect   (rest
                                       (examine-folder d git-path))))))
 
-(defun examine-declaration (declaration-file)
-  (warn "not finished ~S" declaration-file))
+(defun examine-local-projects ()
+  (let ((expectations '((:|cl-confidence| "commit 14dc40a0fde822f4aab4fefc9b40ef5fdcbcd666")
+                        (:|dot-cons-tree| "commit 529dc869e6e46535f4d5567658d750068e55bd5b")))
+        (workstation-attributes (workstation-attributes)))
+    (loop for (project expected-commit) in expectations
+          for project-git = (getf (getf workstation-attributes :local-projects) project)
+          for project-commit = (caadr project-git)
+          for status =  (if  (and (eq  (car project-git) :git)
+                                  (equal expected-commit project-commit))
+                             :matching-commit
+                             (list :no-match project :needs-updating-to-required-commit expected-commit))
+          collect (list project  status))))
