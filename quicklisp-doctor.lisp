@@ -51,7 +51,7 @@
   (format t "architecture ~S~%" (uiop/os:architecture))
   (format t "Lisp ~S ~S~%" (lisp-implementation-type)
           (lisp-implementation-version))
-  
+
   (format t "quicklisp *************************~%")
   (format t "home ~S~%" ql:*quicklisp-home*)
   (format t "client version ~S~%" (ql:client-version))
@@ -63,9 +63,9 @@
         (progn
           (format t "~&~%!!!!!!!!!!!!!!!! WARNING your quicklisp is not up to date !!!!!!!!!!!!!!!!!!!!!!!!~%")
           (format t "In your Lisp REPL please run ~&~a~%~a~%~%"
-                  "(ql:update-client)"             
+                  "(ql:update-client)"
                   "(ql:update-dist \"quicklisp\")"))))
-  
+
   (format t "local projects ~S~%" ql:*local-project-directories*)
 
   (format t "paths *************************~%")
@@ -92,7 +92,28 @@
     (loop for d in (local-project-directories)
           do
              (destructuring-bind (folder git-status &optional commit) (examine-folder d git-path)
-               (format t "~a ~a ~a~%" folder git-status (if commit commit "")))))
+               (format t "~a ~a ~a~%" folder git-status (if commit commit ""))))))
 
-  (defun examine-declaration (declaration-file)
-    (warn "not finished ~S" declaration-file)))
+(defun workstation-attributes ()
+  (let ((latest-quicklisp-version (caar (ql:available-dist-versions "quicklisp")))
+        (git-path (if (eq :win (uiop/os:operating-system))
+                      "c:/msys64/usr/bin/git.exe" ; works with MSYS2 on my system
+                      "/usr/bin/git")))
+    (list
+     :system (list :os (uiop/os:operating-system)
+                   :architecture (uiop/os:architecture)
+                   :lisp-implementation-type (lisp-implementation-type)
+                   :lisp-implementation-version (lisp-implementation-version))
+     :quicklisp (list :client-version (ql:client-version)
+                      :dist-version (ql:dist-version "quicklisp")
+                      :latest-version latest-quicklisp-version
+                      :is-latest-used (equal latest-quicklisp-version
+                                             (ql:dist-version "quicklisp")))
+     :paths (uiop:getenv "PATH")
+     :git (list :tried-path git-path
+                :version (run-program (list git-path "--version")))
+     :local-projects (loop for d in (local-project-directories)
+                           collect (examine-folder d git-path)))))
+
+(defun examine-declaration (declaration-file)
+  (warn "not finished ~S" declaration-file))
