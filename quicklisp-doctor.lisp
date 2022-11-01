@@ -109,30 +109,27 @@
                  :dist-version (ql:dist-version "quicklisp")
                  :latest-version latest-quicklisp-version
                  :is-latest-used (equal latest-quicklisp-version (ql:dist-version "quicklisp"))
-                 :local-projects ql:*local-project-directories*
-                 )
+                 :local-projects ql:*local-project-directories*)
      :paths (uiop:getenv "PATH")
      :git (list :tried-path git-path
                 :version (run-program (list git-path "--version")))
      :local-projects (loop for d in (local-project-directories)
-                           ;; we have a clue for solving the problem in more elegant way
-                           ;; (serapeum:take 2 (member  "a" '("a" 1 "b" 2 "c" 3 "d" 4) :test #'equal))
-                           collect (alexandria:make-keyword ; because getf uses identity
-                                    (car
-                                     (last
-                                      (butlast
-                                       (serapeum:split-sequence #\/ (namestring d))))))
+                           collect (car
+                                    (last
+                                     (butlast
+                                      (serapeum:split-sequence #\/ (namestring d)))))
                            collect   (rest
                                       (examine-folder d git-path))))))
 
-(defun examine-local-projects ()
-  (let ((expectations '((:|cl-confidence| "commit 14dc40a0fde822f4aab4fefc9b40ef5fdcbcd666")
-                        (:|dot-cons-tree| "commit 529dc869e6e46535f4d5567658d750068e55bd5b")))
-        (workstation-attributes (workstation-attributes)))
+;; (examine-local-projects '(("cl-confidence" "commit 14dc40a0fde822f4aab4fefc9b40ef5fdcbcd666") ("dot-cons-tree" "commit 529dc869e6e46535f4d5567658d750068e55bd5b")))
+(defun examine-local-projects (expectations)
+  (let ((workstation-attributes (workstation-attributes)))
     (loop for (project expected-commit) in expectations
-          for project-git = (getf (getf workstation-attributes :local-projects) project)
+          for project-git = (cadr (member project (getf workstation-attributes :local-projects)
+                                          :test #'equal))
           for project-commit = (caadr project-git)
-          for status =  (if  (and (eq  (car project-git) :git)
+          for status =  (if  (and (eq  (car project-git)
+                                       :git)
                                   (equal expected-commit project-commit))
                              :matching-commit
                              (if project-git
