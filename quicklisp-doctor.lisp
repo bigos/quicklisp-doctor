@@ -105,16 +105,18 @@
                    :lisp-implementation-type (lisp-implementation-type)
                    :lisp-implementation-version (lisp-implementation-version))
      :quicklisp (list
-                      :client-version (ql:client-version)
-                      :dist-version (ql:dist-version "quicklisp")
-                      :latest-version latest-quicklisp-version
-                      :is-latest-used (equal latest-quicklisp-version (ql:dist-version "quicklisp"))
+                 :client-version (ql:client-version)
+                 :dist-version (ql:dist-version "quicklisp")
+                 :latest-version latest-quicklisp-version
+                 :is-latest-used (equal latest-quicklisp-version (ql:dist-version "quicklisp"))
                  :local-projects ql:*local-project-directories*
-                      )
+                 )
      :paths (uiop:getenv "PATH")
      :git (list :tried-path git-path
                 :version (run-program (list git-path "--version")))
      :local-projects (loop for d in (local-project-directories)
+                           ;; we have a clue for solving the problem in more elegant way
+                           ;; (serapeum:take 2 (member  "a" '("a" 1 "b" 2 "c" 3 "d" 4) :test #'equal))
                            collect (alexandria:make-keyword ; because getf uses identity
                                     (car
                                      (last
