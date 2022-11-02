@@ -124,15 +124,20 @@
 ;; (examine-local-projects '(("cl-confidence" "commit 14dc40a0fde822f4aab4fefc9b40ef5fdcbcd666") ("dot-cons-tree" "commit 529dc869e6e46535f4d5567658d750068e55bd5b")))
 (defun examine-local-projects (expectations)
   (let ((workstation-attributes (workstation-attributes)))
-    (loop for (project expected-commit) in expectations
-          for project-git = (cadr (member project (getf workstation-attributes :local-projects)
-                                          :test #'equal))
-          for project-commit = (caadr project-git)
-          for status =  (if  (and (eq  (car project-git)
-                                       :git)
-                                  (equal expected-commit project-commit))
-                             :matching-commit
-                             (if project-git
-                                 (list :no-match project :needs-updating-to-required-commit expected-commit)
-                                 (list :not-found project :perhaps-needs-cloning)))
-          collect (list project  status))))
+    (list
+     :quicklisp
+     (cadr
+      (member :quicklisp workstation-attributes))
+     :local-projects
+     (loop for (project expected-commit) in expectations
+           for project-git = (cadr (member project (getf workstation-attributes :local-projects)
+                                           :test #'equal))
+           for project-commit = (caadr project-git)
+           for status =  (if  (and (eq  (car project-git)
+                                        :git)
+                                   (equal expected-commit project-commit))
+                              :matching-commit
+                              (if project-git
+                                  (list :no-match project :needs-updating-to-required-commit expected-commit)
+                                  (list :not-found project :perhaps-needs-cloning)))
+           collect (list project  status)))))
