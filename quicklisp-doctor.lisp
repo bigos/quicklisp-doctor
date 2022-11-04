@@ -121,7 +121,6 @@
                            collect   (rest
                                       (examine-folder d git-path))))))
 
-;; (examine-local-projects '(("cl-confidence" "commit 14dc40a0fde822f4aab4fefc9b40ef5fdcbcd666") ("dot-cons-tree" "commit 529dc869e6e46535f4d5567658d750068e55bd5b")))
 (defun examine-local-projects (expectations)
   (let ((workstation-attributes (workstation-attributes)))
     (list
@@ -130,9 +129,11 @@
       (member :quicklisp workstation-attributes))
      :local-projects
      (loop for expectation in expectations
-           for (p-keyword project ec-keyword expected-commit r-keyword remote) = expectation
-           for kws = (list p-keyword ec-keyword r-keyword)
-           for project-git = (cadr (member project (getf workstation-attributes :local-projects)
+           for expected-name =   (getf expectation :name)
+           for expected-commit = (getf expectation :commit)
+           for expected-remote = (getf expectation :remote)
+
+           for project-git = (cadr (member expected-name (getf workstation-attributes :local-projects)
                                            :test #'equal))
            for project-commit = (caadr project-git)
            for status =  (if  (and (eq  (car project-git)
@@ -140,10 +141,9 @@
                                    (equal expected-commit project-commit))
                               :matching-commit
                               (if project-git
-                                  (list :no-match project :needs-updating-to-required-commit expected-commit)
-                                  (list :not-found project :perhaps-needs-cloning remote)))
-           collect (list project
-                         (if (equalp kws '(:name :commit :remote))
-                             :keywords-ok
-                             :keyword-warning)
+                                  (list :no-match expected-name
+                                        :needs-updating-to-required-commit expected-commit
+                                        :but-we-got project-commit)
+                                  (list :not-found expected-name :perhaps-needs-cloning expected-remote)))
+           collect (list expected-name
                          status)))))
