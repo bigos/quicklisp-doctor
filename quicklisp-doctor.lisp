@@ -139,7 +139,7 @@
            for status =  (if  (and (eq  (car project-git)
                                         :git)
                                    (equal expected-commit project-commit))
-                              :matching-commit
+                              :looks-ok
                               (if project-git
                                   (list :no-match expected-name
                                         :needs-updating-to-required-commit expected-commit
