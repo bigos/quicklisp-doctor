@@ -10,7 +10,7 @@
 (format t "~S~%"
         (quicklisp-doctor:examine-local-projects
          '((:name "quicklisp-doctor"
-            :commit "commit 4a8fc76ee8784fbbbf1d4fd390bc823bbb816bd3"
+            :commit "commit 760fd82b458d39c1da19d449ae7eb7237ec58ab1"
             :remote "git@github.com:bigos/quicklisp-doctor.git ")
            (:name "cl-confidence"
             :commit "commit 14dc40a0fde822f4aab4fefc9b40ef5fdcbcd666"
