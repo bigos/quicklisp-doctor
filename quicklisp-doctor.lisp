@@ -129,7 +129,7 @@
      (cadr
       (member :quicklisp workstation-attributes))
      :local-projects
-     (loop for (project expected-commit) in expectations
+     (loop for (p project ec expected-commit rm remote) in expectations
            for project-git = (cadr (member project (getf workstation-attributes :local-projects)
                                            :test #'equal))
            for project-commit = (caadr project-git)
@@ -139,5 +139,5 @@
                               :matching-commit
                               (if project-git
                                   (list :no-match project :needs-updating-to-required-commit expected-commit)
-                                  (list :not-found project :perhaps-needs-cloning)))
+                                  (list :not-found project :perhaps-needs-cloning remote)))
            collect (list project  status)))))
