@@ -6,9 +6,13 @@
 
 ;;; example run
 ;;; (load "~/quicklisp/local-projects/quicklisp-doctor/check-local-projects.lisp")
+
 (format t "~S~%"
         (quicklisp-doctor:examine-local-projects
-         '((:name "cl-confidence"
+         '((:name "quicklisp-doctor"
+            :commit "commit 4a8fc76ee8784fbbbf1d4fd390bc823bbb816bd3"
+            :remote "git@github.com:bigos/quicklisp-doctor.git ")
+           (:name "cl-confidence"
             :commit "commit 14dc40a0fde822f4aab4fefc9b40ef5fdcbcd666"
             :remote "git@github.com:melusina-org/cl-confidence.git")
            (:name "dot-cons-tree"

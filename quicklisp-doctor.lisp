@@ -121,6 +121,38 @@
                            collect   (rest
                                       (examine-folder d git-path))))))
 
+#|
+(examine-commits "quicklisp-doctor"
+"commit 4a8fc76ee8784fbbbf1d4fd390bc823bbb816bd3"
+"commit cc21822491064dbbd98fca0331f2a62879263253" "/usr/bin/git")
+|#
+(defun examine-commits (expected-name expected-commit available-commit git-path)
+  "Examine local-project with EXPECTED-NAME checking EXPECTED-COMMIT and
+available AVAILABLE-COMMIT commits to provide further advice"
+  (warn "finish me ~S" (list expected-name
+                             expected-commit
+                             available-commit
+                             git-path))
+  (let ((possible-folders (loop for d in ql:*local-project-directories*
+                                collect (merge-pathnames d expected-name ))))
+    (warn "possible folders ~S" possible-folders)
+    (loop for folder in possible-folders
+          collect
+          (list :expected
+                (run-program (list git-path
+                                   "-C" (namestring folder)
+                                   "log"
+                                   (cadr (serapeum:split-sequence #\Space
+                                                                  expected-commit))
+                                   "-1"))
+                :available
+                (run-program (list git-path
+                                   "-C" (namestring folder)
+                                   "log"
+                                   (cadr (serapeum:split-sequence #\Space
+                                                                  available-commit))
+                                   "-1"))))))
+
 (defun examine-local-projects (expectations)
   (let ((workstation-attributes (workstation-attributes)))
     (list
@@ -135,15 +167,19 @@
 
            for project-git = (cadr (member expected-name (getf workstation-attributes :local-projects)
                                            :test #'equal))
-           for project-commit = (caadr project-git)
+           for available-commit = (caadr project-git)
            for status =  (if  (and (eq  (car project-git)
                                         :git)
-                                   (equal expected-commit project-commit))
+                                   (equal expected-commit available-commit))
                               :looks-ok
                               (if project-git
                                   (list :no-match expected-name
-                                        :needs-updating-to-required-commit expected-commit
-                                        :but-we-got project-commit)
+                                        :needs-syncing-commits
+                                        (examine-commits expected-name
+                                                         expected-commit
+                                                         available-commit
+                                                         (getf (getf workstation-attributes :git) :tried-path)))
+
                                   (list :not-found expected-name :perhaps-needs-cloning expected-remote)))
            collect (list expected-name
                          status)))))
