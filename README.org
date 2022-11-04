@@ -22,9 +22,10 @@ That may require more work. If you have any suggestions please raise an issue.
 We can run a simple function to check if our local projects are up to date.
 
 #+begin_src lisp
-QUICKLISP-DOCTOR> (examine-local-projects
-                     '(("cl-confidence" "commit 14dc40a0fde822f4aab4fefc9b40ef5fdcbcd666")
-                       ("dot-cons-tree" "commit 529dc869e6e46535f4d5567658d750068e55bd5b")))
+  (ql:quickload 'quicklisp-doctor)
+  (quicklisp-doctor:examine-local-projects
+   '(("cl-confidence" "commit 14dc40a0fde822f4aab4fefc9b40ef5fdcbcd666")
+     ("dot-cons-tree" "commit 529dc869e6e46535f4d5567658d750068e55bd5b")))
 
-;; (("cl-confidence" :MATCHING-COMMIT) ("dot-cons-tree" :MATCHING-COMMIT))
+  ;; (("cl-confidence" :MATCHING-COMMIT) ("dot-cons-tree" :MATCHING-COMMIT))
 #+end_src
