@@ -129,7 +129,9 @@
      (cadr
       (member :quicklisp workstation-attributes))
      :local-projects
-     (loop for (p project ec expected-commit rm remote) in expectations
+     (loop for expectation in expectations
+           for (p-keyword project ec-keyword expected-commit r-keyword remote) = expectation
+           for kws = (list p-keyword ec-keyword r-keyword)
            for project-git = (cadr (member project (getf workstation-attributes :local-projects)
                                            :test #'equal))
            for project-commit = (caadr project-git)
@@ -140,4 +142,8 @@
                               (if project-git
                                   (list :no-match project :needs-updating-to-required-commit expected-commit)
                                   (list :not-found project :perhaps-needs-cloning remote)))
-           collect (list project  status)))))
+           collect (list project
+                         (if (equalp kws '(:name :commit :remote))
+                             :keywords-ok
+                             :keyword-warning)
+                         status)))))
