@@ -7,6 +7,12 @@
 ;;; example run
 ;;; (load "~/quicklisp/local-projects/quicklisp-doctor/check-local-projects.lisp")
 
+
+#|
+
+This is example of checking local projects, the commits are probably out of
+date. Projects that use it should maintain the list of expected commits
+
 (format t "~S~%"
         (quicklisp-doctor:examine-local-projects
          '((:name "quicklisp-doctor"
@@ -18,3 +24,5 @@
            (:name "dot-cons-tree"
             :commit "commit 529dc869e6e46535f4d5567658d750068e55bd5b"
             :remote "git@github.com:bigos/dot-cons-tree.git"))))
+
+|#
