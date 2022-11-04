@@ -168,18 +168,21 @@ available AVAILABLE-COMMIT commits to provide further advice"
            for project-git = (cadr (member expected-name (getf workstation-attributes :local-projects)
                                            :test #'equal))
            for available-commit = (caadr project-git)
-           for status =  (if  (and (eq  (car project-git)
-                                        :git)
-                                   (equal expected-commit available-commit))
-                              :looks-ok
-                              (if project-git
-                                  (list :no-match expected-name
-                                        :needs-syncing-commits
-                                        (examine-commits expected-name
-                                                         expected-commit
-                                                         available-commit
-                                                         (getf (getf workstation-attributes :git) :tried-path)))
+           for status =  (progn
+                           ;; TODO add handling of partial commit tokens
+                           ;;; (warn "zzzzzzzzz ~S" (list expected-commit available-commit))
+                           (if  (and (eq  (car project-git)
+                                          :git)
+                                     (equal expected-commit available-commit))
+                                :looks-ok
+                                (if project-git
+                                    (list :no-match expected-name
+                                          :needs-syncing-commits
+                                          (examine-commits expected-name
+                                                           expected-commit
+                                                           available-commit
+                                                           (getf (getf workstation-attributes :git) :tried-path)))
 
-                                  (list :not-found expected-name :perhaps-needs-cloning expected-remote)))
+                                    (list :not-found expected-name :perhaps-needs-cloning expected-remote))))
            collect (list expected-name
                          status)))))
