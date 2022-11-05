@@ -54,9 +54,10 @@
             :no-git-detected)))
 
 (defun last-path-element (d)
-  (last
-   (butlast
-    (serapeum:split-sequence #\/ (namestring d)))))
+  (car
+   (last
+    (butlast
+     (serapeum:split-sequence #\/ (namestring d))))))
 
 (defun describe-workstation ()
   (format t "OS *************************~%")
@@ -127,7 +128,7 @@
      :git (list :tried-path git-path
                 :version (run-program (list git-path "--version")))
      :local-projects (loop for d in (local-project-directories)
-                           collect (car (last-path-element d))
+                           collect (last-path-element d)
                            collect   (rest
                                       (examine-folder d git-path))))))
 
@@ -137,7 +138,7 @@
         when (uiop/filesystem:directory-exists-p (merge-pathnames  folder ".git"))
           collect
           (list
-           :name (first (last-path-element folder))
+           :name (last-path-element folder)
            :commit (car (commit-commit (cadr  (run-program (list git-path
                                                                  "-C" (namestring folder)
                                                                  "log"
