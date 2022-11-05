@@ -30,8 +30,17 @@
 ;;; consider adding parsing of commands output at some point
 (defun commit-info (commit)
   (let ((split (serapeum:split-sequence #\Newline commit)))
-    (list (nth 0 split)
-          (nth 2 split))))
+    (loop for s in split
+          when (or  (alexandria:starts-with-subseq "commit " s)
+                    (alexandria:starts-with-subseq "Date: " s))
+            collect s)))
+
+(defun commit-commit (commit)
+  (let ((split (serapeum:split-sequence #\Newline commit)))
+    (loop for s in split
+          when (or  (alexandria:starts-with-subseq "commit " s))
+            collect s)))
+
 
 (defun examine-folder (folder git-path)
   (if (uiop/filesystem:directory-exists-p (merge-pathnames  folder ".git"))
@@ -44,6 +53,10 @@
       (list folder
             :no-git-detected)))
 
+(defun last-path-element (d)
+  (last
+   (butlast
+    (serapeum:split-sequence #\/ (namestring d)))))
 
 (defun describe-workstation ()
   (format t "OS *************************~%")
@@ -114,28 +127,25 @@
      :git (list :tried-path git-path
                 :version (run-program (list git-path "--version")))
      :local-projects (loop for d in (local-project-directories)
-                           collect (car
-                                    (last
-                                     (butlast
-                                      (serapeum:split-sequence #\/ (namestring d)))))
+                           collect (last-path-element d)
                            collect   (rest
                                       (examine-folder d git-path))))))
 
-
+;; (list-git-local-projects "/usr/bin/git")
 (defun list-git-local-projects (git-path)
   (loop for folder in (local-project-directories)
         collect
         (list
-         :name folder
-         :commit (run-program (list git-path
-                                    "-C" (namestring folder)
-                                    "log"
-                                    "-1"))
-         :remote (run-program (list git-path
-                                    "-C" (namestring folder)
-                                    "remote"
-                                    "get-url"
-                                    "origin")))))
+         :name (first (last-path-element folder))
+         :commit (car (commit-commit (cadr  (run-program (list git-path
+                                                               "-C" (namestring folder)
+                                                               "log"
+                                                               "-1")))))
+         :remote (cadr  (run-program (list git-path
+                                           "-C" (namestring folder)
+                                           "remote"
+                                           "get-url"
+                                           "origin"))))))
 
 #|
 (examine-commits "quicklisp-doctor"
@@ -192,7 +202,7 @@ available AVAILABLE-COMMIT commits to provide further advice"
                                      (equal expected-commit available-commit))
                                 :looks-ok
                                 (if project-git
-                                    (list :no-match expected-name
+                                    (list :commits-do-not-match expected-name
                                           :may-need-syncing-commits
                                           (examine-commits expected-name
                                                            expected-commit
