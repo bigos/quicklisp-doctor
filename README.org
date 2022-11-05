@@ -33,3 +33,11 @@ We can run a simple function to check if our local projects are up to date.
 
   ;; (("cl-confidence" :MATCHING-COMMIT) ("dot-cons-tree" :MATCHING-COMMIT))
 #+end_src
+
+** Getting the list of local projects and commits for sharing
+
+For Windows the git path may be different.
+
+#+begin_src lisp
+(list-git-local-projects "/usr/bin/git")
+#+end_src
