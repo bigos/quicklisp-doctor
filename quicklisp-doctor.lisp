@@ -134,18 +134,19 @@
 ;; (list-git-local-projects "/usr/bin/git")
 (defun list-git-local-projects (git-path)
   (loop for folder in (local-project-directories)
-        collect
-        (list
-         :name (first (last-path-element folder))
-         :commit (car (commit-commit (cadr  (run-program (list git-path
-                                                               "-C" (namestring folder)
-                                                               "log"
-                                                               "-1")))))
-         :remote (cadr  (run-program (list git-path
-                                           "-C" (namestring folder)
-                                           "remote"
-                                           "get-url"
-                                           "origin"))))))
+        when (uiop/filesystem:directory-exists-p (merge-pathnames  folder ".git"))
+          collect
+          (list
+           :name (first (last-path-element folder))
+           :commit (car (commit-commit (cadr  (run-program (list git-path
+                                                                 "-C" (namestring folder)
+                                                                 "log"
+                                                                 "-1")))))
+           :remote (cadr  (run-program (list git-path
+                                             "-C" (namestring folder)
+                                             "remote"
+                                             "get-url"
+                                             "origin"))))))
 
 (defun examine-commits (expected-name expected-commit available-commit git-path)
   "Examine local-project with EXPECTED-NAME checking EXPECTED-COMMIT and
