@@ -39,3 +39,6 @@ For Windows the git path may be different.
 #+begin_src lisp
 (quicklisp-doctor:list-git-local-projects "/usr/bin/git")
 #+end_src
+
+** Promising alternative
+https://www.reddit.com/r/Common_Lisp/comments/ymzkkj/quicklisp_doctor/
