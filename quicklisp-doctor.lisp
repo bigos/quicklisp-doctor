@@ -193,7 +193,7 @@ available AVAILABLE-COMMIT commits to provide further advice"
                                 :looks-ok
                                 (if project-git
                                     (list :no-match expected-name
-                                          :needs-syncing-commits
+                                          :may-need-syncing-commits
                                           (examine-commits expected-name
                                                            expected-commit
                                                            available-commit
