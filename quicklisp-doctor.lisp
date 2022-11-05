@@ -121,6 +121,22 @@
                            collect   (rest
                                       (examine-folder d git-path))))))
 
+
+(defun list-git-local-projects (git-path)
+  (loop for folder in (local-project-directories)
+        collect
+        (list
+         :name folder
+         :commit (run-program (list git-path
+                                    "-C" (namestring folder)
+                                    "log"
+                                    "-1"))
+         :remote (run-program (list git-path
+                                    "-C" (namestring folder)
+                                    "remote"
+                                    "get-url"
+                                    "origin")))))
+
 #|
 (examine-commits "quicklisp-doctor"
 "commit 4a8fc76ee8784fbbbf1d4fd390bc823bbb816bd3"
