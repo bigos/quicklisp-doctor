@@ -127,7 +127,7 @@
      :git (list :tried-path git-path
                 :version (run-program (list git-path "--version")))
      :local-projects (loop for d in (local-project-directories)
-                           collect (last-path-element d)
+                           collect (car (last-path-element d))
                            collect   (rest
                                       (examine-folder d git-path))))))
 
@@ -147,11 +147,6 @@
                                            "get-url"
                                            "origin"))))))
 
-#|
-(examine-commits "quicklisp-doctor"
-"commit 4a8fc76ee8784fbbbf1d4fd390bc823bbb816bd3"
-"commit cc21822491064dbbd98fca0331f2a62879263253" "/usr/bin/git")
-|#
 (defun examine-commits (expected-name expected-commit available-commit git-path)
   "Examine local-project with EXPECTED-NAME checking EXPECTED-COMMIT and
 available AVAILABLE-COMMIT commits to provide further advice"
@@ -196,7 +191,6 @@ available AVAILABLE-COMMIT commits to provide further advice"
            for available-commit = (caadr project-git)
            for status =  (progn
                            ;; TODO add handling of partial commit tokens
-                           ;;; (warn "zzzzzzzzz ~S" (list expected-commit available-commit))
                            (if  (and (eq  (car project-git)
                                           :git)
                                      (equal expected-commit available-commit))
