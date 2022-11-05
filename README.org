@@ -39,5 +39,5 @@ We can run a simple function to check if our local projects are up to date.
 For Windows the git path may be different.
 
 #+begin_src lisp
-(list-git-local-projects "/usr/bin/git")
+(quicklisp-doctor:list-git-local-projects "/usr/bin/git")
 #+end_src

@@ -5,4 +5,5 @@
   (:use :cl :esrap)
   (:export #:examine-declaration
            #:examine-local-projects
+           #:list-git-local-projects
            #:describe-workstation))
