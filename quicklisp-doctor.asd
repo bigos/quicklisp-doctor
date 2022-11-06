@@ -4,6 +4,7 @@
   :description "Utility for detecting problems with quicklisp and local-projects"
   :author "Jacek Podkanski"
   :version "0.0.1"
+  :source-control (:git "https://github.com/bigos/quicklisp-doctor.git")
   :serial T
   :depends-on (:esrap :alexandria :serapeum)
   :components ((:file "packages")
