@@ -122,7 +122,10 @@
                  :client-version (ql:client-version)
                  :dist-version (ql:dist-version "quicklisp")
                  :latest-version latest-quicklisp-version
-                 :is-latest-used (equal latest-quicklisp-version (ql:dist-version "quicklisp"))
+                 (if (equal latest-quicklisp-version (ql:dist-version "quicklisp"))
+                     :up-to-date
+                     :needs-updating)
+                 T
                  :local-projects ql:*local-project-directories*)
      :paths (uiop:getenv "PATH")
      :git (list :tried-path git-path
