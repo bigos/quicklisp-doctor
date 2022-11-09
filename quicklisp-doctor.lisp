@@ -143,22 +143,17 @@
                                                                  "-C" (namestring folder)
                                                                  "log"
                                                                  "-1")))))
-           :remote (cadr  (run-program (list git-path
-                                             "-C" (namestring folder)
-                                             "remote"
-                                             "get-url"
-                                             "origin"))))))
+           :remote (cadr (run-program (list git-path
+                                            "-C" (namestring folder)
+                                            "remote"
+                                            "get-url"
+                                            "origin"))))))
 
 (defun examine-commits (expected-name expected-commit available-commit git-path)
   "Examine local-project with EXPECTED-NAME checking EXPECTED-COMMIT and
 available AVAILABLE-COMMIT commits to provide further advice"
-  (warn "finish me ~S" (list expected-name
-                             expected-commit
-                             available-commit
-                             git-path))
   (let ((possible-folders (loop for d in ql:*local-project-directories*
                                 collect (merge-pathnames d expected-name ))))
-    (warn "possible folders ~S" possible-folders)
     (loop for folder in possible-folders
           collect
           (list :expected
