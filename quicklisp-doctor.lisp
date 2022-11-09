@@ -132,7 +132,7 @@
                            collect   (rest
                                       (examine-folder d git-path))))))
 
-;; (list-git-local-projects "/usr/bin/git")
+;; (quicklisp-doctor:list-git-local-projects "/usr/bin/git")
 (defun list-git-local-projects (git-path)
   (loop for folder in (local-project-directories)
         when (uiop/filesystem:directory-exists-p (merge-pathnames  folder ".git"))
