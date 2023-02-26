@@ -69,6 +69,8 @@
   (format t "quicklisp *************************~%")
   (format t "home ~S~%" ql:*quicklisp-home*)
   (format t "client version ~S~%" (ql:client-version))
+  (format t "enabled dists ~S~%"
+          (loop for d in (ql-dist:enabled-dists) collect d))
   (let ((latest-quicklisp-version (caar (ql:available-dist-versions "quicklisp"))))
     (format t "latest dist version ~S~%" latest-quicklisp-version)
     (format t "loaded dist version ~S~%" (ql:dist-version "quicklisp"))
@@ -120,6 +122,7 @@
                    :lisp-implementation-version (lisp-implementation-version))
      :quicklisp (list
                  :client-version (ql:client-version)
+                 :enabled-dists (loop for d in (ql-dist:enabled-dists) collect d)
                  :dist-version (ql:dist-version "quicklisp")
                  :latest-version latest-quicklisp-version
                  (if (equal latest-quicklisp-version (ql:dist-version "quicklisp"))
